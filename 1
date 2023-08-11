@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>객관식 문제 퀴즈</title>
+</head>
+<body>
+    <h1>객관식 문제 퀴즈</h1>
+
+    <div id="timer">남은 시간: 15:00</div>
+
+    <form id="quiz-form">
+        <!-- 문제 1 -->
+        <h2>문제 1</h2>
+        <p>대한민국의 수도는?</p>
+        <input type="radio" name="q1" value="seoul">서울<br>
+        <input type="radio" name="q1" value="tokyo">도쿄<br>
+        <input type="radio" name="q1" value="beijing">베이징<br>
+        <input type="radio" name="q1" value="washington">워싱턴 D.C.<br>
+
+        <!-- 문제 2 -->
+        <h2>문제 2</h2>
+        <p>다음 중 아무튼 아이스크림 맛이 아닌 것은?</p>
+        <input type="radio" name="q2" value="chocolate">초콜릿<br>
+        <input type="radio" name="q2" value="vanilla">바닐라<br>
+        <input type="radio" name="q2" value="strawberry">딸기<br>
+        <input type="radio" name="q2" value="pizza">피자<br>
+
+        <!-- 문제 3 ~ 10 (중략) -->
+
+        <!-- 제출 버튼 -->
+        <button type="button" onclick="submitAnswers()">답안 제출</button>
+    </form>
+
+    <div id="result" style="display: none;"></div>
+
+    <script>
+        let remainingTime = 15 * 60;
+        const timerElement = document.getElementById('timer');
+        const quizForm = document.getElementById('quiz-form');
+        const resultElement = document.getElementById('result');
+
+        function updateTimer() {
+            const minutes = Math.floor(remainingTime / 60);
+            const seconds = remainingTime % 60;
+            const formattedTime = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+            timerElement.textContent = `남은 시간: ${formattedTime}`;
+
+            if (remainingTime > 0) {
+                remainingTime--;
+                setTimeout(updateTimer, 1000);
+            } else {
+                timerElement.textContent = '시간 종료';
+                submitAnswers();
+            }
+        }
+
+        updateTimer();
+
+        function submitAnswers() {
+            // 각 문제의 정답 설정 (문제 1 ~ 10의 정답을 설정)
+            const answers = {
+                q1: 'seoul',
+                q2: 'pizza',
+                // 문제 3 ~ 10의 정답 설정
+            };
+
+            // 답안 채점
+            let score = 0;
+            for (const question in answers) {
+                const selectedOption = quizForm.querySelector(`input[name="${question}"]:checked`);
+                if (selectedOption && selectedOption.value === answers[question]) {
+                    score++;
+                }
+            }
+
+            // 결과 표시
+            const resultMessage = `총 ${score}개의 문제를 맞췄습니다!`;
+            resultElement.textContent = resultMessage;
+            resultElement.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
+
